@@ -37,13 +37,11 @@ public class UserController {
 
   @PutMapping("")
   public Object updateUser(@RequestBody User requestUser) {
-    if (userService.handleFetchUserById(requestUser.getId()) == null) {
+    User responseUser = userService.handleUpdateUser(requestUser);
+
+    if (responseUser == null) {
       return "User not found!";
     }
-
-    User user = new User(requestUser.getId(), requestUser.getEmail(), requestUser.getName(), requestUser.getPassword());
-
-    User responseUser = userService.handleSaveUser(user);
 
     return responseUser;
   }
