@@ -22,6 +22,13 @@ public class User {
   public User() {
   }
 
+  public User(int id, String name, String email, String password) {
+    this.id = id;
+    this.name = name;
+    this.email = email;
+    this.password = password;
+  }
+
   public User(String name, String email, String password) {
     this.name = name;
     this.email = email;
@@ -63,9 +70,9 @@ public class User {
   @Override
   public String toString() {
     return "User{" +
-            "name='" + name + '\'' +
-            ", email='" + email + '\'' +
-            ", password='" + password + '\'' +
-            '}';
+        "name='" + name + '\'' +
+        ", email='" + email + '\'' +
+        ", password='" + password + '\'' +
+        '}';
   }
 }
