@@ -2,9 +2,12 @@ package vn.hoidanit.jobhunter.controller;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import vn.hoidanit.jobhunter.domain.User;
+import vn.hoidanit.jobhunter.exception.IdInvalidException;
 import vn.hoidanit.jobhunter.service.UserService;
 
 @RestController
@@ -17,39 +20,50 @@ public class UserController {
   }
 
   @GetMapping("")
-  public List<User> fetchAllUser() {
-    return userService.handleFetchAllUser();
+  public ResponseEntity<List<User>> fetchAllUser() {
+    return ResponseEntity.status(HttpStatus.OK).body(userService.handleFetchAllUser());
   }
 
   @GetMapping("{id}")
-  public User fetchUserById(@PathVariable int id) {
-    return userService.handleFetchUserById(id);
+  public ResponseEntity<Object> fetchUserById(@PathVariable int id) {
+    User responseUser = userService.handleFetchUserById(id);
+
+    if (responseUser == null) {
+      return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+    }
+
+    return ResponseEntity.status(HttpStatus.OK).body(responseUser);
   }
 
   @PostMapping("")
-  public String createNewUser(@RequestBody User requestUser) {
+  public ResponseEntity<User> createNewUser(@RequestBody User requestUser) {
     User user = new User(requestUser.getEmail(), requestUser.getName(), requestUser.getPassword());
 
     User responseUser = userService.handleSaveUser(user);
 
-    return "Create " + responseUser.toString();
+    return ResponseEntity.status(HttpStatus.CREATED).body(responseUser);
   }
 
   @PutMapping("")
-  public Object updateUser(@RequestBody User requestUser) {
+  public ResponseEntity<Object> updateUser(@RequestBody User requestUser) {
     User responseUser = userService.handleUpdateUser(requestUser);
 
     if (responseUser == null) {
-      return "User not found!";
+      return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 
-    return responseUser;
+    // return responseUser;
+    return ResponseEntity.status(HttpStatus.OK).body(responseUser);
   }
 
   @DeleteMapping("{id}")
-  public String deleteUser(@PathVariable int id) {
+  public ResponseEntity<Void> deleteUser(@PathVariable int id) throws IdInvalidException {
+    if (id >= 100) {
+      throw new IdInvalidException("Id khong lon hon 100!");
+    }
+
     userService.handleDeleteUser(id);
 
-    return "Delete User with " + id;
+    return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
   }
 }
