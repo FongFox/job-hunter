@@ -31,6 +31,10 @@ public class FormatRestResponse implements ResponseBodyAdvice {
         RestResponse<Object> restResponse = new RestResponse<Object>();
         restResponse.setStatusCode(statusCode);
 
+        if (body instanceof String) {
+            return body;
+        }
+
         if(statusCode >= 400) {
             // Case error
             return body;
