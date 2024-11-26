@@ -39,7 +39,7 @@ public class UserController {
   public ResponseEntity<User> createNewUser(@RequestBody User requestUser) {
     User user = new User(requestUser.getEmail(), requestUser.getName(), requestUser.getPassword());
 
-    User responseUser = userService.handleSaveUser(user);
+    User responseUser = userService.handleCreateUser(user);
 
     return ResponseEntity.status(HttpStatus.CREATED).body(responseUser);
   }
