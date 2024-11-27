@@ -27,13 +27,21 @@ public class UserService {
         return userRepository.findById(id).orElse(null);
     }
 
+    public User handleFetchUserByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
     public User handleSaveUser(User user) {
         return userRepository.save(user);
     }
 
     public User handleCreateUser(User user) {
         String userHashPassword = passwordEncoder.encode(user.getPassword());
-        User tempUser = new User(user.getName(), user.getEmail(), userHashPassword);
+
+        User tempUser = new User();
+        tempUser.setName(user.getName());
+        tempUser.setEmail(user.getPassword());
+        tempUser.setPassword(userHashPassword);
 
         return userRepository.save(tempUser);
     }
