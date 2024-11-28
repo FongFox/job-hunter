@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import vn.hoidanit.jobhunter.domain.User;
-import vn.hoidanit.jobhunter.exception.IdInvalidException;
+import vn.hoidanit.jobhunter.util.exception.IdInvalidException;
 import vn.hoidanit.jobhunter.service.UserService;
 
 @RestController

@@ -1,4 +1,4 @@
-package vn.hoidanit.jobhunter.exception;
+package vn.hoidanit.jobhunter.util.exception;
 
 public class IdInvalidException extends Exception {
     // Parameterless Constructor

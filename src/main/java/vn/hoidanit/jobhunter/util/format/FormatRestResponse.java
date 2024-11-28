@@ -1,4 +1,4 @@
-package vn.hoidanit.jobhunter.util;
+package vn.hoidanit.jobhunter.util.format;
 
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.core.MethodParameter;
