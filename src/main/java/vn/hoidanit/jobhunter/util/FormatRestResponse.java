@@ -1,4 +1,4 @@
-package vn.hoidanit.jobhunter.util.format;
+package vn.hoidanit.jobhunter.util;
 
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.core.MethodParameter;
@@ -35,7 +35,7 @@ public class FormatRestResponse implements ResponseBodyAdvice {
             return body;
         }
 
-        if(statusCode >= 400) {
+        if (statusCode >= 400) {
             // Case error
             return body;
         } else {

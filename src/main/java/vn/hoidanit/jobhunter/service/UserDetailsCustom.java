@@ -21,8 +21,6 @@ public class UserDetailsCustom implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         vn.hoidanit.jobhunter.domain.User user = userService.handleFetchUserByEmail(username);
 
-        System.out.println(user.toString());
-
         if (user == null) {
             throw new UsernameNotFoundException("Username/password not valid!");
         }
