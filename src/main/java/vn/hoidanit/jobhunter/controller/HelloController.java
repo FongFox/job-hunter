@@ -9,10 +9,7 @@ import vn.hoidanit.jobhunter.util.exception.IdInvalidException;
 public class HelloController {
 
     @GetMapping("/")
-    public String getHelloWorld() throws IdInvalidException {
-        if (true)
-            throw new IdInvalidException("Check Exception!");
-
+    public String getHelloWorld() {
         return "Hello World (Hỏi Dân IT & Eric)";
     }
 }
