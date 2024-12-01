@@ -21,12 +21,12 @@ public class UserController {
 
   @GetMapping("")
   public ResponseEntity<List<User>> fetchAllUser() {
-    return ResponseEntity.status(HttpStatus.OK).body(userService.handleFetchAllUser());
+    return ResponseEntity.status(HttpStatus.OK).body(this.userService.handleFetchAllUser());
   }
 
   @GetMapping("{id}")
   public ResponseEntity<Object> fetchUserById(@PathVariable int id) {
-    User responseUser = userService.handleFetchUserById(id);
+    User responseUser = this.userService.handleFetchUserById(id);
 
     if (responseUser == null) {
       return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
@@ -39,7 +39,7 @@ public class UserController {
   public ResponseEntity<User> createNewUser(@RequestBody User requestUser) {
     User user = new User(requestUser.getEmail(), requestUser.getName(), requestUser.getPassword());
 
-    User responseUser = userService.handleCreateUser(user);
+    User responseUser = this.userService.handleCreateUser(user);
 
     return ResponseEntity.status(HttpStatus.CREATED).body(responseUser);
   }
@@ -62,7 +62,7 @@ public class UserController {
       throw new IdInvalidException("Id khong lon hon 100!");
     }
 
-    userService.handleDeleteUser(id);
+    this.userService.handleDeleteUser(id);
 
     return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
   }

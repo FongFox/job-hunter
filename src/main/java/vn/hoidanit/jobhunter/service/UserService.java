@@ -20,19 +20,19 @@ public class UserService {
     }
 
     public List<User> handleFetchAllUser() {
-        return userRepository.findAll();
+        return this.userRepository.findAll();
     }
 
     public User handleFetchUserById(int id) {
-        return userRepository.findById(id).orElse(null);
+        return this.userRepository.findById(id).orElse(null);
     }
 
     public User handleFetchUserByEmail(String email) {
-        return userRepository.findByEmail(email);
+        return this.userRepository.findByEmail(email);
     }
 
     public User handleSaveUser(User user) {
-        return userRepository.save(user);
+        return this.userRepository.save(user);
     }
 
     public User handleCreateUser(User user) {
@@ -43,7 +43,7 @@ public class UserService {
         tempUser.setEmail(user.getPassword());
         tempUser.setPassword(userHashPassword);
 
-        return userRepository.save(tempUser);
+        return this.userRepository.save(tempUser);
     }
 
     public User handleUpdateUser(User user) {
@@ -56,12 +56,12 @@ public class UserService {
         dbUser.setEmail(user.getEmail());
         dbUser.setName(user.getName());
         dbUser.setPassword(user.getPassword());
-        userRepository.save(dbUser);
+        this.userRepository.save(dbUser);
 
         return dbUser;
     }
 
     public void handleDeleteUser(int id) {
-        userRepository.deleteById(id);
+        this.userRepository.deleteById(id);
     }
 }
