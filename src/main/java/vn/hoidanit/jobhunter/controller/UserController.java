@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import vn.hoidanit.jobhunter.domain.User;
 import vn.hoidanit.jobhunter.dto.RestfulPaginationDTO;
+import vn.hoidanit.jobhunter.util.annotation.ApiMessage;
 import vn.hoidanit.jobhunter.util.exception.IdInvalidException;
 import vn.hoidanit.jobhunter.service.UserService;
 
@@ -26,6 +27,7 @@ public class UserController {
   }
 
   @GetMapping("")
+  @ApiMessage("Fetch All Users")
   public ResponseEntity<RestfulPaginationDTO> fetchAllUser(@Filter Specification<User> specification, Pageable pageable) {
     return ResponseEntity.status(HttpStatus.OK).body(this.userService.handleFetchAllUsersWithPagination(specification, pageable));
   }

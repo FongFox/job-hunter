@@ -13,6 +13,7 @@ import vn.hoidanit.jobhunter.domain.Company;
 import vn.hoidanit.jobhunter.domain.User;
 import vn.hoidanit.jobhunter.dto.RestfulPaginationDTO;
 import vn.hoidanit.jobhunter.service.CompanyService;
+import vn.hoidanit.jobhunter.util.annotation.ApiMessage;
 import vn.hoidanit.jobhunter.util.exception.DataNotFoundException;
 
 import java.util.List;
@@ -33,6 +34,7 @@ public class CompanyController {
     }
 
     @GetMapping("")
+    @ApiMessage("Fetch All Companies")
     public ResponseEntity<RestfulPaginationDTO> fetchAllCompanies(@Filter Specification<Company> specification, Pageable pageable) {
         return ResponseEntity.ok(this.companyService.handleFetchAllCompaniesWithPagination(specification, pageable));
     }
