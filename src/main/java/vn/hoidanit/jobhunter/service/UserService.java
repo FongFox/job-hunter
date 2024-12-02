@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -27,12 +28,12 @@ public class UserService {
         return this.userRepository.findAll();
     }
 
-    public RestfulPaginationDTO handleFetchAllUsersWithPagination(Pageable pageable) {
-        Page<User> userPage = this.userRepository.findAll(pageable);
+    public RestfulPaginationDTO handleFetchAllUsersWithPagination(Specification<User> userSpecification, Pageable pageable) {
+        Page<User> userPage = this.userRepository.findAll(userSpecification ,pageable);
         RestfulPaginationDTO restfulPaginationDTO = new RestfulPaginationDTO();
         Meta meta = new Meta();
 
-        meta.setPage(userPage.getNumber());
+        meta.setPage(userPage.getNumber() + 1);
         meta.setPageSize(userPage.getSize());
 
         meta.setPages(userPage.getTotalPages());

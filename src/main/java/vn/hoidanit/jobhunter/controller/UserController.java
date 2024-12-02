@@ -3,8 +3,10 @@ package vn.hoidanit.jobhunter.controller;
 import java.util.List;
 import java.util.Optional;
 
+import com.turkraft.springfilter.boot.Filter;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,19 +26,8 @@ public class UserController {
   }
 
   @GetMapping("")
-  public ResponseEntity<RestfulPaginationDTO> fetchAllUser(
-          @RequestParam("current") Optional<String> currentOptional,
-          @RequestParam("pageSize") Optional<String> pageSizeOptional
-  ) {
-    String sCurrent = currentOptional.orElse("");
-    String sPageSize = pageSizeOptional.orElse("");
-
-    int pageCurrent = Integer.parseInt(sCurrent) - 1;
-    int pageSize = Integer.parseInt(sPageSize);
-
-    Pageable pageable = PageRequest.of(pageCurrent, pageSize);
-
-    return ResponseEntity.status(HttpStatus.OK).body(this.userService.handleFetchAllUsersWithPagination(pageable));
+  public ResponseEntity<RestfulPaginationDTO> fetchAllUser(@Filter Specification<User> specification, Pageable pageable) {
+    return ResponseEntity.status(HttpStatus.OK).body(this.userService.handleFetchAllUsersWithPagination(specification, pageable));
   }
 
   @GetMapping("{id}")
