@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("companies")
+@RequestMapping("api/v1/companies")
 public class CompanyController {
     private final CompanyService companyService;
 
