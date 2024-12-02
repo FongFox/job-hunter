@@ -3,10 +3,14 @@ package vn.hoidanit.jobhunter.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import vn.hoidanit.jobhunter.domain.User;
+import vn.hoidanit.jobhunter.dto.Meta;
+import vn.hoidanit.jobhunter.dto.RestfulPaginationDTO;
 import vn.hoidanit.jobhunter.repository.UserRepository;
 
 @Service
@@ -21,6 +25,23 @@ public class UserService {
 
     public List<User> handleFetchAllUser() {
         return this.userRepository.findAll();
+    }
+
+    public RestfulPaginationDTO handleFetchAllUsersWithPagination(Pageable pageable) {
+        Page<User> userPage = this.userRepository.findAll(pageable);
+        RestfulPaginationDTO restfulPaginationDTO = new RestfulPaginationDTO();
+        Meta meta = new Meta();
+
+        meta.setPage(userPage.getNumber());
+        meta.setPageSize(userPage.getSize());
+
+        meta.setPages(userPage.getTotalPages());
+        meta.setTotal(userPage.getTotalElements());
+
+        restfulPaginationDTO.setMeta(meta);
+        restfulPaginationDTO.setResult(userPage.getContent());
+
+        return restfulPaginationDTO;
     }
 
     public User handleFetchUserById(int id) {

@@ -1,14 +1,19 @@
 package vn.hoidanit.jobhunter.controller;
 
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import vn.hoidanit.jobhunter.domain.Company;
+import vn.hoidanit.jobhunter.dto.RestfulPaginationDTO;
 import vn.hoidanit.jobhunter.service.CompanyService;
+import vn.hoidanit.jobhunter.util.exception.DataNotFoundException;
+
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("companies")
@@ -22,5 +27,53 @@ public class CompanyController {
     @PostMapping("")
     public ResponseEntity<Company> createNewCompany(@RequestBody @Valid Company resquestCompany){
         return ResponseEntity.status(HttpStatus.CREATED).body(this.companyService.handleCreateCompany(resquestCompany));
+    }
+
+    @GetMapping("")
+    public ResponseEntity<RestfulPaginationDTO> fetchAllCompanies(
+            @RequestParam("current") Optional<String> currentOptional,
+            @RequestParam("pageSize") Optional<String> pageSizeOptional
+    ) {
+        String sCurrent = currentOptional.orElse("");
+        String sPageSize = pageSizeOptional.orElse("");
+
+        int pageCurrent = Integer.parseInt(sCurrent) - 1;
+        int pageSize = Integer.parseInt(sPageSize);
+
+        Pageable pageable = PageRequest.of(pageCurrent, pageSize);
+
+        return ResponseEntity.ok(this.companyService.handleFetchAllCompaniesWithPagination(pageable));
+    }
+
+    @GetMapping("{id}")
+    public ResponseEntity<Company> fetchCompanyById(@PathVariable int id) throws DataNotFoundException {
+        Company dbCompany = this.companyService.handFetchCompanyById(id);
+        if (dbCompany == null) {
+            throw new DataNotFoundException("Company not found with this id!");
+        }
+
+//        return ResponseEntity.ok().body(dbCompany);
+        return ResponseEntity.ok(dbCompany);
+    }
+
+    @PutMapping("")
+    public ResponseEntity<Company> updateCompany(@RequestBody @Valid Company resquestCompany) throws DataNotFoundException {
+        if(this.companyService.handFetchCompanyById(resquestCompany.getId()) == null) {
+            throw new DataNotFoundException("Company not found with this id!");
+        }
+
+//        return ResponseEntity.ok().body(this.companyService.handleUpdateCompany(resquestCompany));
+        return ResponseEntity.ok(this.companyService.handleUpdateCompany(resquestCompany));
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<Void> deleteCompany(@PathVariable int id) throws DataNotFoundException {
+        boolean isCompanyDeleted = this.companyService.handleDeleteCompanyById(id);
+        if (!isCompanyDeleted) {
+            throw new DataNotFoundException("Company not found with this id!");
+        }
+
+//        return ResponseEntity.ok().body(null);
+        return ResponseEntity.ok(null);
     }
 }
