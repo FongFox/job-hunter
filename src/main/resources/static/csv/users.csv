@@ -1,0 +1,4 @@
+name,email,password,age,gender,address
+Admin,admin@gmail.com,123456,22,MALE,TP.HCM
+User,user@gmail.com,123456,20,MALE,TP.HCM
+HoiDanIT,hoidanit@gmail.com,123456,25,MALE,HaNoi

@@ -1,14 +1,29 @@
 package vn.hoidanit.jobhunter.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class ResLoginDTO {
   private String accessToken;
+  private UserLogin userLogin;
 
-  public String getAccessToken() {
-    return accessToken;
-  }
+  @Getter
+  @Setter
+  public static class UserLogin {
+    private int id;
+    private String email;
+    private String name;
 
-  public void setAccessToken(String accessToken) {
-    this.accessToken = accessToken;
+    public UserLogin() {
+    }
+
+    public UserLogin(int id, String email, String name) {
+      this.id = id;
+      this.email = email;
+      this.name = name;
+    }
   }
 
 }
