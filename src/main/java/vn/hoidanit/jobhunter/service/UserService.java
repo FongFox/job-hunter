@@ -12,16 +12,20 @@ import org.springframework.stereotype.Service;
 import vn.hoidanit.jobhunter.domain.User;
 import vn.hoidanit.jobhunter.dto.Meta;
 import vn.hoidanit.jobhunter.dto.RestfulPaginationDTO;
+import vn.hoidanit.jobhunter.dto.UserDetailDTO;
 import vn.hoidanit.jobhunter.repository.UserRepository;
+import vn.hoidanit.jobhunter.util.mapper.UserMapper;
 
 @Service
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UserMapper userMapper;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, UserMapper userMapper) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.userMapper = userMapper;
     }
 
     public List<User> handleFetchAllUser() {
@@ -40,7 +44,9 @@ public class UserService {
         meta.setTotal(userPage.getTotalElements());
 
         restfulPaginationDTO.setMeta(meta);
-        restfulPaginationDTO.setResult(userPage.getContent());
+
+        List<UserDetailDTO> userDetailDTOList = this.userMapper.mapDetailUserListToDTO(userPage.getContent());
+        restfulPaginationDTO.setResult(userDetailDTOList);
 
         return restfulPaginationDTO;
     }
@@ -62,28 +68,42 @@ public class UserService {
 
         User tempUser = new User();
         tempUser.setName(user.getName());
-        tempUser.setEmail(user.getPassword());
+        tempUser.setEmail(user.getEmail());
         tempUser.setPassword(userHashPassword);
+        tempUser.setGender(user.getGender());
+        tempUser.setAddress(user.getAddress());
+        tempUser.setAge(user.getAge());
 
         return this.userRepository.save(tempUser);
     }
 
     public User handleUpdateUser(User user) {
         User dbUser = handleFetchUserById(user.getId());
-
         if (dbUser == null) {
             return null;
         }
-
-        dbUser.setEmail(user.getEmail());
+//        dbUser.setEmail(user.getEmail());
+//        if(user.getPassword() != null && !user.getPassword().isEmpty() && !user.getPassword().isBlank()) {
+//            String userHashPassword = passwordEncoder.encode(user.getPassword());
+//            dbUser.setPassword(userHashPassword);
+//        }
         dbUser.setName(user.getName());
-        dbUser.setPassword(user.getPassword());
-        this.userRepository.save(dbUser);
+        dbUser.setGender(user.getGender());
+        dbUser.setAddress(user.getAddress());
+        dbUser.setAge(user.getAge());
 
-        return dbUser;
+        return this.userRepository.save(dbUser);
     }
 
     public void handleDeleteUser(int id) {
         this.userRepository.deleteById(id);
+    }
+
+    public boolean handleCheckUserExistsByEmail(String email) {
+        return this.userRepository.existsByEmail(email);
+    }
+
+    public boolean handleCheckUserExistsById(int id) {
+        return this.userRepository.existsById(id);
     }
 }

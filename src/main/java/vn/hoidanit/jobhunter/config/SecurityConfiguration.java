@@ -30,6 +30,7 @@ import vn.hoidanit.jobhunter.util.SecurityUtil;
 @Configuration
 @EnableMethodSecurity(securedEnabled = true)
 public class SecurityConfiguration {
+
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -44,7 +45,7 @@ public class SecurityConfiguration {
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(
                         authz -> authz
-                                .requestMatchers("/", "/login").permitAll()
+                                .requestMatchers("/", "api/v1/login").permitAll()
                                 .anyRequest().authenticated())
                 .oauth2ResourceServer(
                         oauth2 -> oauth2

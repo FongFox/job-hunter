@@ -2,17 +2,12 @@ package vn.hoidanit.jobhunter.domain;
 
 import java.time.Instant;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import vn.hoidanit.jobhunter.util.SecurityUtil;
 import vn.hoidanit.jobhunter.util.constant.GenderEnum;
 
 @Entity
@@ -27,7 +22,11 @@ public class User {
     private int id;
 
     private String name;
+
+    @NotBlank(message = "Email can not blank!")
     private String email;
+
+    @NotBlank(message = "Password can not blank!")
     private String password;
     private int age;
 
@@ -62,5 +61,17 @@ public class User {
         this.name = name;
         this.email = email;
         this.password = password;
+    }
+
+    @PrePersist
+    public void handleBeforeCreate() {
+        this.createBy = SecurityUtil.getCurrentUserLogin().isPresent() ? SecurityUtil.getCurrentUserLogin().get() : "";
+        this.createAt = Instant.now();
+    }
+
+    @PreUpdate
+    public void handleBeforeUpdate() {
+        this.updateBy = SecurityUtil.getCurrentUserLogin().isPresent() ? SecurityUtil.getCurrentUserLogin().get() : "";
+        this.updateAt = Instant.now();
     }
 }

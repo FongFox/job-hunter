@@ -20,7 +20,7 @@ public class GlobalException {
             UsernameNotFoundException.class,
             BadCredentialsException.class,
             IdInvalidException.class,
-            DataNotFoundException.class
+            EmailExistException.class
     })
     public ResponseEntity<RestResponse<Object>> handleIdException(Exception ex) {
         RestResponse<Object> res = new RestResponse<Object>();
@@ -28,6 +28,17 @@ public class GlobalException {
         res.setError(ex.getMessage());
         res.setMessage("Exception occurs...");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
+    }
+
+    @ExceptionHandler(value = {
+            DataNotFoundException.class
+    })
+    public ResponseEntity<RestResponse<Object>> handleNotFoundException(Exception ex) {
+        RestResponse<Object> res = new RestResponse<Object>();
+        res.setStatusCode(HttpStatus.NOT_FOUND.value());
+        res.setError(ex.getMessage());
+        res.setMessage("404 Not Found. URL may not exist...");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(res);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
